@@ -1,0 +1,27 @@
+@baseURl=https://6723fb74493fac3cf24cd48c.mockapi.io/api/v1/pokemon
+
+###
+GET {{baseURl}}?idPokemon=1&gitHubId=112534393
+
+
+###
+PUT {{baseURl}}/1?gitHubId=112534393
+Content-Type: application/json
+
+{
+    "comentarioPokemon": "teste",
+    "likeDislike": true
+}
+
+
+###
+POST {{baseURl}}
+Content-Type: application/json
+
+{
+    "comentarioPokemon": "teste",
+    "likeDislike": true
+}
+
+###
+DELETE {{baseURl}}/1?gitHubId=112534393
