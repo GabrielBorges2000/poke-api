@@ -33,6 +33,7 @@ Este documento oferece uma visão geral do desenvolvimento do projeto de integra
 - **Exibição com Cards:** Utilizar uma interface de cards para exibir os Pokémons, implementando carregamento incremental e paginação, ou carregar dados parcialmente em vez de carregar todos de uma vez e armazenar em cache.
 - **Biblioteca de Componentes Alternativa:** Utilizar uma biblioteca mais flexível, como `shadcn/ui`, no lugar do Material UI. Essa biblioteca permite maior personalização e cópia de código-fonte direto no projeto, otimizando as dependências e melhorando a performance.
 
+
 ### Observação
 
 Ao utilizar o **StackBlitz** como ambiente de desenvolvimento, é possível que algumas imagens estáticas na página inicial não carreguem devido às limitações da plataforma. Testes em ambientes locais e de produção foram bem-sucedidos, confirmando que essa é uma limitação do StackBlitz e não um erro de desenvolvimento.
