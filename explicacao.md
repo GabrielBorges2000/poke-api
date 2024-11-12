@@ -1,45 +1,42 @@
 # EXPLICACAO.md - Visão Geral do Desenvolvimento
 
 ## Resumo do Projeto
-Este arquivo destina-se a fornecer uma visão geral do desenvolvimento deste teste, incluindo os principais desafios e soluções adotadas.
+Este documento oferece uma visão geral do desenvolvimento do projeto de integração com a PokeAPI. Abaixo estão os principais desafios enfrentados e as soluções implementadas para superá-los.
 
 ### Desafios Encontrados
-Por favor, descreva os principais desafios que você encontrou ao desenvolver este projeto. Algumas áreas a serem cobertas:
 
-1. **Integração com a PokeAPI**:
-   - Houve alguma dificuldade na obtenção e manipulação dos dados da PokeAPI?
-      Somente na parte de atualizar o comentário existente.
-   - Como você lidou com a paginação (se aplicável) e exibição dos dados?
-      Quando o usuário vai na lista eu pego os dados e gero um cache e reutilizo gerando a páginação com todos os dados.
+#### 1. **Integração com a PokeAPI**
+   - **Dificuldade na manipulação de dados:** A principal complexidade surgiu ao atualizar comentários existentes, enquanto a obtenção e manipulação dos dados em geral foi tranquila.
+   - **Paginação e exibição de dados:** A estratégia adotada foi carregar todos os dados de uma vez, armazená-los em cache e realizar a paginação localmente. Isso permitiu que os dados fossem reutilizados em vez de fazer novas requisições, otimizando a experiência do usuário.
 
-2. **Implementação do Drawer**:
-   - Quais foram os desafios em exibir os dados detalhados no Drawer?
-      Basicamente para realizar a request e pegar os dados foram simples. Porém a parte de pegar o comentário e o lik atual foram as mais dificeis. depois que ue entendi como a mockApi funcionava eu consgeui realizar.
-   - Como foi a experiência de adicionar as opções de like/dislike e o campo de comentário?
-      A principio parecia algo dificil, mas ai quando implementei um "Mini sistema de login" simples sem válidação do usuário só para saber quem foi que curtiu e comentou ficou mais simples.
+#### 2. **Implementação do Drawer para Dados Detalhados**
+   - **Exibição de dados detalhados:** A requisição para exibir dados detalhados foi direta, mas recuperar comentários e preferências de “like” existentes exigiu mais ajustes.
+   - **Like/Dislike e comentários:** No início, a adição dessas funcionalidades parecia complexa. No entanto, após a implementação de um "Mini Sistema de Login" sem autenticação avançada, onde apenas o nome do usuário era capturado, a lógica simplificou. A integração com a API do GitHub validava se o usuário existia, e os dados foram armazenados no `localStorage`. Em seguida, a `Context API` do React gerenciou o estado de autenticação e personalizou as interações.
 
-3. **Envio de Comentários e Preferências**:
-   - Houve alguma complexidade na configuração e envio da requisição POST para a API mock?
-      No post não, mas no put sim
-   - Como você lidou com a exibição de feedback (sucesso/falha) ao usuário?
-      utilizei a biblioteca toast para exibir alertas na tela. Além, de desabilitar o botão no loading e reabilitar quando estivesse pronto.
+#### 3. **Envio de Comentários e Preferências**
+   - **Configuração de requisições POST e PUT:** A configuração das requisições POST foi direta. Contudo, houve maior dificuldade com as requisições PUT ao atualizar comentários.
+   - **Feedback ao usuário:** Utilizei a biblioteca `toast` para notificar o usuário sobre o sucesso ou falha das ações. Além disso, desabilitei o botão durante o carregamento e reabilitei-o após o término da requisição.
 
-4. **Uso de TypeScript e MUI**:
-   - Como você organizou o código em TypeScript para garantir uma tipagem eficiente e clara?
-      criei uma pasta types e separei e reutilizei as mesma typagens
-   - Houve alguma dificuldade no uso do Material Design (MUI) para tornar o design responsivo?
-      Sim, na parte da tabela pois eu não estava conseguindo colocar tamanhos nas colunas, mas ai eu lê na doxumentaçõa que era possivel colocar um flex, width e minWidth para personalizar e deu certo, como fazia tempo que eu não utiliza essa lib eu havia esquecido como funcionava. Ai no final deu tudo certo.
+#### 4. **Uso de TypeScript e MUI (Material UI)**
+   - **Tipagem e organização:** Para garantir uma tipagem eficiente e clara, criei uma pasta `types` onde as tipagens foram separadas e reutilizadas ao longo do projeto.
+   - **Design responsivo:** Um dos desafios com o MUI foi ajustar as colunas da tabela. Após consultar a documentação, utilizei propriedades como `flex`, `width` e `minWidth`, o que solucionou a questão. O MUI não era uma biblioteca com que eu estava familiarizado recentemente, mas o projeto foi ajustado com sucesso após a leitura.
 
 ### Soluções e Melhorias
-- Descreva as soluções que você implementou para contornar os desafios.
-- Comente sobre possíveis melhorias ou funcionalidades adicionais que poderiam ser adicionadas ao projeto.
 
-Eu criei uma tabela onde lista um catálogo de pokemons, ai todos os usuários poderia ver essa lista e os detalhes, porém só poderia interagir quem tivesse autorização, ai usutilizei algo que seria parecido com um login pegando apenas o nome do usuário e pegando os dados dele na api do github, após isso eu salvei os dados do usuário no localstorage e depois utilizei a contextApi do react para criar hooks personalizados para manipular se o usuário estava logado ou não. A única validação foi saber se existia um usuário no github.
+#### Soluções Implementadas
+- **Autenticação e Permissões:** Criei uma tabela para exibir o catálogo de Pokémons, disponível a todos os usuários. Para permitir interações, foi implementado um sistema de "login" simplificado, com verificação do nome de usuário via API do GitHub. Os dados foram armazenados em `localStorage`, e a `Context API` do React gerenciou o estado de autenticação, permitindo que os usuários interagissem apenas se autenticados.
+- **Cache e Paginação:** A estratégia de carregar todos os dados de uma vez e armazená-los em cache permitiu paginação rápida e eficiente sem recarregamento constante dos dados.
+- **Feedback Visual:** Notificações de sucesso e falha foram exibidas com `toast`, aprimorando a experiência do usuário com feedbacks em tempo real.
 
-Após isso o usuário poderia ver os pokemons e interagir, sendo assim possivel ver as interações anteriores.
+#### Melhorias Futuras
+- **Contador de Likes:** Adicionar uma coluna que exiba a contagem total de "likes" por Pokémon ou criar uma nova página onde o usuário possa ver seus Pokémons favoritos.
+- **Exibição com Cards:** Utilizar uma interface de cards para exibir os Pokémons, implementando carregamento incremental e paginação, ou carregar dados parcialmente em vez de carregar todos de uma vez e armazenar em cache.
+- **Biblioteca de Componentes Alternativa:** Utilizar uma biblioteca mais flexível, como `shadcn/ui`, no lugar do Material UI. Essa biblioteca permite maior personalização e cópia de código-fonte direto no projeto, otimizando as dependências e melhorando a performance.
 
-Para melhorias futuras recomendo criar uma coluna com a quantidade de likes que o pokemon tem ou até memso criar uma nova página para o usuário ver os pokemons que ele mais gostou. Além disso poderia ser utilizado a estrategia colocar os pokemons em cards, gerando uma lista de cards e realizar o carregamento parcial e a páginação, ou até mesmo ir carregando os dados parcialmente ao invéz de trazer todos eles e salvar em cache para poder realizar a páginação.
+### Observação
+
+Ao utilizar o **StackBlitz** como ambiente de desenvolvimento, é possível que algumas imagens estáticas na página inicial não carreguem devido às limitações da plataforma. Testes em ambientes locais e de produção foram bem-sucedidos, confirmando que essa é uma limitação do StackBlitz e não um erro de desenvolvimento.
 
 ---
 
-Obrigado por suas respostas detalhadas! Sua visão e explicações nos ajudam a entender melhor seu processo de pensamento e habilidades de resolução de problemas.
+Agradecemos por suas respostas detalhadas! Suas explicações ajudam a entender melhor seu processo de raciocínio e habilidades na resolução de problemas.
