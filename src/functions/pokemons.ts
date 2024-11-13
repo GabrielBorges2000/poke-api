@@ -42,43 +42,39 @@ export async function getAllPokemons(): Promise<Pokemon[] | Error> {
 export async function getPokemon(
     pokemon: Pokemon,
     user: GitHubUser | null
-): Promise<PokemonDetails | Error> {
+): Promise<PokemonDetails> {
     try {
-        const [pokemonResponse, userDataResponse] = await Promise.all([
-            axios.get(pokemon.url),
-            api.mockApi.get('/pokemon', {
-                params: {
-                    // biome-ignore lint/style/useNumberNamespace: <explanation>
-                    idPokemon: parseInt(pokemon.id.replace('#', '')),
-                    gitHubId: user?.id || 'not-found',
-                },
-            }),
-        ])
 
-        console.log('userDataResponse', userDataResponse.data)
-
+        const pokemonResponse = await axios.get(pokemon.url)
         const pokemonData = pokemonResponse.data
+
         let userData = null
 
-        if (
-            userDataResponse.status === 304 ||
-            userDataResponse.data.length > 0
-        ) {
-            userData = userDataResponse.data
+        if (user) {
+            const userDataResponse = await api.mockApi.get('/pokemon', {
+                params: {
+                    idPokemon: Number.parseInt(pokemon.id.toString().replace('#', '')),
+                    gitHubId: user.id,
+                },
+            })
+
+            const userDataArray = userDataResponse.data
+            userData =
+                Array.isArray(userDataArray) && userDataArray.length > 0
+                    ? userDataArray[0]
+                    : null
         }
 
-        const newPokemon = {
+        const newPokemon: PokemonDetails = {
             ...pokemonData,
-            userComment: userDataResponse.data
-                ? userDataResponse.data[0].comentarioPokemon
-                : '',
-            userLiked: userDataResponse.data
-                ? userDataResponse.data[0].likeDislike
-                : false,
+            userComment: userData?.comentarioPokemon || '',
+            userLiked: userData?.likeDislike || false,
         }
 
         return newPokemon
     } catch (error) {
-        return error as Error
+        console.error('Erro ao buscar dados do Pokémon:', error)
+        throw new Error('Falha ao buscar dados do Pokémon')
     }
 }
+
